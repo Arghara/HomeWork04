@@ -1,61 +1,84 @@
-﻿﻿Console.Write("Введите размер массива: ");
-string len = Console.ReadLine();
+﻿﻿
+// Задача 29: Напишите программу, которая задаёт массив из 8 элементов и выводит их на экран.
+// 1, 2, 5, 7, 19 -> [1, 2, 5, 7, 19]
+// 6, 1, 33 -> [6, 1, 33]
 
-void ExceptionHandling(string enterA)
-{
-    bool yesInt = int.TryParse(enterA, out int result);
+Console.WriteLine($"\nЗадача 29. Ряд чисел преобразует в массив");
+Console.Write("Введите ряд чисел, разделенных запятой : ");
+string? seriesOfNumbers = Console.ReadLine();
 
-    if (yesInt && result > 0)
+seriesOfNumbers = seriesOfNumbers + ",";    // дополнительня запятая для обозначения конца строки
+
+// функция удаления пробелов из строки 
+string RemovingSpaces (string series){
+  string seriesNew = "";
+  for (int i = 0; i < series.Length; i++)
+  {
+    if (series[i] != ' ') 
     {
-        int[] rndNum = new int[result];
-        FillArray(rndNum);
-        PrintArray(rndNum);
+      seriesNew += series[i];
     }
-    else
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("{0} -> Некорректный ввод!", len);
-        Console.ForegroundColor = ConsoleColor.White;
-    }
+  }
+  return seriesNew;
 }
 
-void FillArray(int[] array)
-{
-    int length = array.Length;
-    for (int i = 0; i < length; i++)
-    {
-        Console.Write("Введите целое число, {0} элемент массива: ", i + 1);
-        string elemArray = Console.ReadLine();
-        bool yesInt = int.TryParse(elemArray, out int result);
-        if (yesInt)
-        {
-            array[i] = result;
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{elemArray} -> Некорректный ввод!");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"{i + 1} элемент массива = 0");
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-    }
+//  функция  проверки на правильность ввода 
+void СheckNumber2 (int  series){
+
+      if (series == '0'||series == '1'||series == '2'
+      ||series == '3'||series == '4'||series == '5'||series == '6'
+      ||series == '7'||series == '8'||series == '9'||series == ','
+      ||series == '-')
+      {
+      }
+        else {
+          Console.WriteLine($"Ошибка ввода  символа. Вводи цифры.");
+
+      }
 }
 
-void PrintArray(int[] arr)
-{
-    string str = "[";
-    foreach (int i in arr)
-    {
-        str += $", {i}";
+// функция  создания и заполнения массива из строки
+int[] ArrayOfNumbers(string seriesNew){ 
+
+  int[] arrayOfNumbers = new int[1];    // инициализация массива из 1 элемента
+
+  int j =0;
+
+  for (int i = 0; i < seriesNew.Length; i++){
+    string seriesNew1 = "";
+
+    while (seriesNew[i] != ',' && i < seriesNew.Length){
+      seriesNew1 += seriesNew[i];
+      СheckNumber2(seriesNew[i]);
+      i++;
     }
-    str = str.Remove(1, 2);
-    str += "]";
-    Console.ForegroundColor = ConsoleColor.DarkRed;
-    Console.Write($"Массив из {arr.Length} элементов: ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.Write(str);
-    Console.ForegroundColor = ConsoleColor.White;
+    arrayOfNumbers[j] = Convert.ToInt32(seriesNew1);    // заполняет массив значениями из строки
+    if (i < seriesNew.Length-1){
+      arrayOfNumbers = arrayOfNumbers.Concat(new int[] {0}).ToArray();    // добавляет новый нулевой элемент в конец массива
+    }
+    j++;
+  }
+  return arrayOfNumbers;
 }
 
-ExceptionHandling(len);
+// функция  вывода массива на печать 
+void PrintArry(int[] coll){
+  int count = coll.Length;
+  int index = 0;
+  Console.Write("[");
+  while(index < count){
+    Console.Write(coll[index]);
+    index++;
+    if (index < count){
+      Console.Write(", ");
+    }
+  }
+  Console.Write("]");
+} 
+
+
+string seriesNew = RemovingSpaces(seriesOfNumbers);
+
+int[] arrayOfNumbers =  ArrayOfNumbers(seriesNew);
+
+PrintArry(arrayOfNumbers);
